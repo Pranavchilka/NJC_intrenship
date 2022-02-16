@@ -1,0 +1,75 @@
+package com.step2;
+
+import java.sql.*;
+import java.sql.DriverManager;
+import java.util.Scanner;
+
+public class NJCCode 
+{
+	public static void main(String[] args) 
+	{
+		Scanner scan = new Scanner(System.in);
+		Connection con = null;
+		Statement st = null;
+		String query1 = "create database NJC";
+		
+		try 
+		{
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/dot?user=root&password=Pranav");
+			System.out.println("Connection established sucessfully...");
+			
+			st = con.createStatement();
+			boolean b1 = st.execute(query1);
+			if(b1 == false)
+			{
+				System.out.println("Database created sucessfully...");
+				boolean b2 = st.execute("create table NJC.Movies(Name varchar(50),Actor varchar(50),Actress varchar(50),Director varchar(50),Release_Year int(10))");
+				if(b2 == false)
+				{
+					System.out.println("Table created Sucessfully..");
+					
+					//int c1 = st.executeUpdate("insert into NJC.Movies values('DDLJ','SRK','Kajol','YRF',1995)");
+					System.out.println("Enter how many records you want to insert");
+					int records = scan.nextInt();
+					String q3 = null ;
+					int c2 = 0;
+					for(int i=1;i<=records;i++)
+					{
+						System.out.println("Enter Movie Name: ");
+						String name = scan.next();
+						
+						System.out.println("Enter Movie Actor Name: ");
+						String actor = scan.next();
+						
+						System.out.println("Enter Movie Actress Name: ");
+						String actress = scan.next();
+						
+						System.out.println("Enter Movie Director: ");
+						String director = scan.next();
+						
+						System.out.println("Enter Movie realease date: ");
+						int yor = scan.nextInt();
+						
+						q3 = "insert into NJC.Movies values('"+name+"','"+actor+"','"+actress+"','"+director+"',"+yor+")";
+						c2 = st.executeUpdate(q3);
+						c2++;
+					}
+					System.out.println(c2+" Records inserted");
+				}
+				else
+				{
+					System.out.println("Table not created...");
+				}
+			}
+			else
+			{
+				System.out.println("Database not created..");
+			}	
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}	
+	}
+}
